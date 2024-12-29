@@ -28,6 +28,10 @@ class SmokeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.addCigaretteButton.setOnClickListener {
+            viewModel.addCigarette()
+        }
+
         //observers for cigarette count
         viewModel.dayCigaretteCount.observe(viewLifecycleOwner) { count ->
             binding.dailyCountTextView.text = "Daily: $count"
@@ -41,16 +45,18 @@ class SmokeFragment : Fragment() {
             binding.monthlyCountTextView.text = "Monthly: $count"
         }
 
-        binding.addCigaretteButton.setOnClickListener {
-            viewModel.addCigarette()
-        }
+        viewModel.timer.observe(viewLifecycleOwner) { time ->
+            binding.tvTimer.text = "$time"
 
+
+        }
 
     }
 
     override fun onResume() {
         super.onResume()
         viewModel.refreshCounts()
+        viewModel.loadTimerState()
     }
 
     override fun onDestroyView() {

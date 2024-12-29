@@ -7,6 +7,7 @@ import kotlinx.datetime.LocalDate
 @Entity
 data class CigaretteEntry (
     @PrimaryKey(autoGenerate = true) val id: Int=0,
+    val timestamp: Long,
     val date: LocalDate,
     val count: Int
 )
