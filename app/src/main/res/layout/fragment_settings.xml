@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center">
+    android:orientation="vertical"
+    android:padding="16dp">
 
+    <!-- Pack Price Display -->
     <TextView
-        android:id="@+id/settingsFragmentText"
+        android:id="@+id/packPriceTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pack Price (20 Cigarettes)"
+        android:textSize="18sp"
+        android:paddingBottom="16dp" />
+    <TextView
+        android:id="@+id/PriceTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="$0"
+        android:textSize="18sp"
+        android:paddingBottom="16dp" />
+
+    <!-- Change Pack Price Button -->
+    <Button
+        android:id="@+id/changePackPriceButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Settings Fragment"
-        android:textSize="20sp"/>
-</FrameLayout>
+        android:text="Change Pack Price" />
+
+</LinearLayout>
