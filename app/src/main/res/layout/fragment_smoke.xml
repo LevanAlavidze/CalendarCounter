@@ -4,15 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
     android:padding="16dp">
 
-
+    <!-- Top row for daily/weekly/monthly counters -->
+    <!-- Remove layout_weight so it doesn't stretch -->
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:gravity="center_horizontal"
         android:orientation="horizontal">
 
         <TextView
@@ -41,23 +40,33 @@
             android:padding="8dp"
             android:text="Monthly: 0"
             android:textSize="18sp" />
-
-
     </LinearLayout>
 
+    <!-- RecyclerView expands and scrolls if needed -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/lastTenRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingTop="8dp" />
+
+    <!-- Timer text -->
     <TextView
         android:id="@+id/tvTimer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:text="Timer: 00:00:00"
         android:layout_marginBottom="16dp"
         android:textSize="24sp" />
 
-
+    <!-- Add Cigarette Button -->
     <Button
         android:id="@+id/addCigaretteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:text="Add Cigarette"
         android:padding="8dp" />
+
 </LinearLayout>

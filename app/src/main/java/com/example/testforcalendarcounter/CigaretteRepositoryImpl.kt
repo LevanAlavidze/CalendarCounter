@@ -19,16 +19,57 @@ class CigaretteRepositoryImpl @Inject constructor(
     private val timerDao: TimerDao
 ) : CigaretteRepository {
 
+
+
     override suspend fun addCigarette() {
+        val now = Clock.System.now()
+        val timestamp = now.toEpochMilliseconds()
+        val date = now.toLocalDateTime(TimeZone.currentSystemDefault()).date
+
+        // Always insert a new row with count=1 for each cigarette
+        val newEntry = CigaretteEntry(
+            timestamp = timestamp,
+            date = date,
+            count = 1
+        )
+        dao.insertOrUpdate(newEntry)
+    }
+
+    /*override suspend fun addCigarette() {
         val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
         val entry = dao.getEntryByDate(today) ?: CigaretteEntry(timestamp = 0L, date = today, count = 0)
         dao.insertOrUpdate(entry.copy(count = entry.count + 1))
-    }
+    }*/
+
+   /* override suspend fun addCigarette() {
+        val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
+        val existingEntry = dao.getEntryByDate(today)
+        val newCount = (existingEntry?.count ?: 0) + 1
+
+        // If you'd prefer multiple rows per day, do:
+        // val entry = CigaretteEntry(
+        //     timestamp = System.currentTimeMillis(),
+        //     date = today,
+        //     count = 1
+        // )
+        // dao.insertOrUpdate(entry)
+
+        val entry = existingEntry?.copy(
+            count = newCount,
+            timestamp = System.currentTimeMillis()
+        ) ?: CigaretteEntry(
+            timestamp = System.currentTimeMillis(),
+            date = today,
+            count = 1
+        )
+        dao.insertOrUpdate(entry)
+    }*/
 
     override suspend fun getDailyCount(): Int {
         val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
-        return dao.getEntryByDate(today)?.count ?: 0
+        return dao.getDailySum(today) ?: 0  // If null, return 0
     }
+
 
     override suspend fun getWeeklyCount(): Int {
         val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
@@ -46,5 +87,12 @@ class CigaretteRepositoryImpl @Inject constructor(
     }
     override suspend fun getTimer(): Timer? = withContext(Dispatchers.IO) {
         timerDao.getTimer()
+    }
+    override suspend fun deleteCigarette(entry: CigaretteEntry) {
+        dao.deleteCigarette(entry)
+    }
+
+    override suspend fun getLastTenCigarettes(): List<CigaretteEntry> {
+        return dao.getLastTenCigarettes()
     }
 }

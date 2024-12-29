@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testforcalendarcounter.databinding.FragmentSmokeBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,6 +18,8 @@ class SmokeFragment : Fragment() {
 
     private val viewModel: SmokeViewModel by viewModels()
 
+    private lateinit var lastTenAdapter: LastTenAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -27,6 +30,13 @@ class SmokeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        lastTenAdapter = LastTenAdapter { entry ->
+            viewModel.deleteCigarette(entry)
+        }
+        binding.lastTenRecyclerView.adapter = lastTenAdapter
+
+        binding.lastTenRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         binding.addCigaretteButton.setOnClickListener {
             viewModel.addCigarette()
@@ -47,8 +57,10 @@ class SmokeFragment : Fragment() {
 
         viewModel.timer.observe(viewLifecycleOwner) { time ->
             binding.tvTimer.text = "$time"
+        }
 
-
+        viewModel.lastTenCigarettes.observe(viewLifecycleOwner) { entries ->
+            lastTenAdapter.setData(entries)
         }
 
     }

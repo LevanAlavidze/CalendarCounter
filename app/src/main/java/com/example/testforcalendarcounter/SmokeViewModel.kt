@@ -28,8 +28,12 @@ class SmokeViewModel @Inject constructor(
     private val _timer = MutableLiveData<String>()
     val timer: LiveData<String> = _timer
 
+    private val _lastTenCigarettes = MutableLiveData<List<CigaretteEntry>>()
+    val lastTenCigarettes: LiveData<List<CigaretteEntry>> = _lastTenCigarettes
+
     init {
         loadTimerState()
+        fetchLastTenCigarettes()
     }
 
     fun refreshCounts() {
@@ -42,6 +46,26 @@ class SmokeViewModel @Inject constructor(
 
     fun addCigarette() {
         viewModelScope.launch {
+            // Timer logic
+            val startTime = System.currentTimeMillis()
+            timerManager.resetAndStartTimer { formattedTime ->
+                _timer.postValue(formattedTime)
+            }
+            repository.saveTimer(Timer(startTime = startTime, isRunning = true))
+
+            // Insert a new row
+            repository.addCigarette()
+
+            // Refresh counters
+            refreshCounts()
+
+            // Re-fetch the last ten cigarettes -> updates RecyclerView
+            fetchLastTenCigarettes()
+        }
+    }
+
+/*    fun addCigarette() {
+        viewModelScope.launch {
             val startTime = System.currentTimeMillis()
             timerManager.resetAndStartTimer { formattedTime ->
                 _timer.postValue(formattedTime)
@@ -51,7 +75,7 @@ class SmokeViewModel @Inject constructor(
             refreshCounts()
         }
 
-    }
+    }*/
     fun loadTimerState() {
         viewModelScope.launch {
             val timer = repository.getTimer()
@@ -63,6 +87,20 @@ class SmokeViewModel @Inject constructor(
                 // If no timer or not running, show default
                 _timer.value = "Timer: 00:00:00"
             }
+        }
+    }
+
+    fun fetchLastTenCigarettes() {
+        viewModelScope.launch {
+            _lastTenCigarettes.value = repository.getLastTenCigarettes()
+        }
+    }
+
+    fun deleteCigarette(entry: CigaretteEntry) {
+        viewModelScope.launch {
+            repository.deleteCigarette(entry)
+            fetchLastTenCigarettes() // Refresh list
+            refreshCounts()
         }
     }
 
