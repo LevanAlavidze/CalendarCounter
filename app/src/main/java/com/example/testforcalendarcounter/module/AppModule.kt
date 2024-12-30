@@ -5,7 +5,8 @@ import androidx.room.Room
 import com.example.testforcalendarcounter.CigaretteRepository
 import com.example.testforcalendarcounter.CigaretteRepositoryImpl
 import com.example.testforcalendarcounter.data.dao.CigaretteDao
-import com.example.testforcalendarcounter.data.dao.timer.TimerDao
+import com.example.testforcalendarcounter.data.dao.PackPriceDao
+import com.example.testforcalendarcounter.data.dao.TimerDao
 import com.example.testforcalendarcounter.dataBase.CigaretteDatabase
 import dagger.Module
 import dagger.Provides
@@ -42,14 +43,20 @@ object AppModule {
     fun provideTimerDao(database: CigaretteDatabase): TimerDao {
         return database.timerDao()
     }
+    @Provides
+    @Singleton
+    fun providePackPriceDao(database: CigaretteDatabase): PackPriceDao {
+        return database.packPriceDao()
+    }
 
     @Provides
     @Singleton
     fun provideCigaretteRepository(
-        dao: CigaretteDao,
-        timerDao: TimerDao
+        cigaretteDao: CigaretteDao,
+        timerDao: TimerDao,
+        packPriceDao: PackPriceDao
     ): CigaretteRepository {
-        return CigaretteRepositoryImpl(dao, timerDao)
+        return CigaretteRepositoryImpl(cigaretteDao, timerDao,packPriceDao)
     }
 
     @Provides

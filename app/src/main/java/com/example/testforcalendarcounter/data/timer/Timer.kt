@@ -1,4 +1,4 @@
-package com.example.testforcalendarcounter.data.dao.timer
+package com.example.testforcalendarcounter.data.timer
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

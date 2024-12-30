@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -7,48 +6,99 @@
     android:padding="16dp">
 
     <!-- Top row for daily/weekly/monthly counters -->
-    <!-- Remove layout_weight so it doesn't stretch -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/dailyCountTextView"
+        <!-- Daily Counter with Cost -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_marginEnd="16dp"
-            android:padding="8dp"
-            android:text="Daily: 0"
-            android:textSize="18sp" />
+            android:gravity="center_horizontal">
 
-        <TextView
-            android:id="@+id/weeklyCountTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:padding="8dp"
-            android:text="Weekly: 0"
-            android:textSize="18sp" />
+            <TextView
+                android:id="@+id/dailyCountTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="Daily: 0"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/monthlyCountTextView"
+            <TextView
+                android:id="@+id/dailyCostTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cost: 0 GEL"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Weekly Counter with Cost -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_marginEnd="16dp"
-            android:padding="8dp"
-            android:text="Monthly: 0"
-            android:textSize="18sp" />
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/weeklyCountTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="Weekly: 0"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/weeklyCostTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cost: 0 GEL"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Monthly Counter with Cost -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/monthlyCountTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:text="Monthly: 0"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/monthlyCostTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cost: 0 GEL"
+                android:textSize="14sp" />
+        </LinearLayout>
     </LinearLayout>
 
-    <!-- RecyclerView expands and scrolls if needed -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/lastTenRecyclerView"
+    <!-- RecyclerView inside NestedScrollView -->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:paddingTop="8dp" />
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/lastTenRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp" />
+    </androidx.core.widget.NestedScrollView>
 
     <!-- Timer text -->
     <TextView
