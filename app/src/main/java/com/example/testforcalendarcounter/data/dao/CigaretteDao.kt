@@ -29,4 +29,33 @@ interface CigaretteDao {
 
     @Delete
     suspend fun deleteCigarette(entry: CigaretteEntry)
+
+    @Query("""
+        SELECT date, SUM(count) as totalCount
+        FROM cigaretteentry
+        WHERE date BETWEEN :startDate AND :endDate
+        GROUP BY date
+        ORDER BY date ASC
+    """)
+    suspend fun getCountsGroupedByDate(startDate: LocalDate, endDate: LocalDate): List<DateCount>
+
+    @Query("""
+        SELECT strftime('%m', date) as monthNum, SUM(count) as totalCount
+        FROM cigaretteentry
+        WHERE date BETWEEN :startDate AND :endDate
+        GROUP BY monthNum
+        ORDER BY monthNum
+    """)
+    suspend fun getCountsGroupedByMonth(startDate: LocalDate, endDate: LocalDate): List<MonthCount>
+
 }
+
+data class DateCount(
+    val date: LocalDate,
+    val totalCount: Int
+)
+
+data class MonthCount(
+    val monthNum: String,  // Because strftime returns string
+    val totalCount: Int
+)

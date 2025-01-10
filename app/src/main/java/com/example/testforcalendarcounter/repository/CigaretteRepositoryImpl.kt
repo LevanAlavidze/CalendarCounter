@@ -1,4 +1,4 @@
-package com.example.testforcalendarcounter
+package com.example.testforcalendarcounter.repository
 
 import android.util.Log
 import com.example.testforcalendarcounter.data.CigaretteEntry
@@ -7,6 +7,8 @@ import com.example.testforcalendarcounter.data.dao.PackPriceDao
 import com.example.testforcalendarcounter.data.dao.TimerDao
 import com.example.testforcalendarcounter.data.packprice.PackPrice
 import com.example.testforcalendarcounter.data.timer.Timer
+import com.example.testforcalendarcounter.statistics.viewmodel.DayData
+import com.example.testforcalendarcounter.statistics.viewmodel.MonthData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
@@ -100,4 +102,64 @@ class CigaretteRepositoryImpl @Inject constructor(
         val costPerCigarette = calculateCostPerCigarette()
         return monthlyCount to (monthlyCount * costPerCigarette)
     }
+
+    override suspend fun calculateYearlyCost(): Pair<Int, Double> {
+        val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
+        // Subtract (dayOfYear - 1) days to get Jan 1 of this year
+        val startOfYear = today.minus(today.dayOfYear - 1, DateTimeUnit.DAY)
+        val yearlyCount = cigaretteDao.getCountBetweenDates(startOfYear, today)
+        val costPerCigarette = calculateCostPerCigarette()
+        val yearlyCost = yearlyCount * costPerCigarette
+        Log.d("CigaretteRepositoryImpl", "Yearly: count=$yearlyCount, cost=$yearlyCost")
+        return yearlyCount to yearlyCost
+    }
+
+    override suspend fun getWeeklyStatsForLast7Days(): List<DayData> {
+        // Replace this with actual logic to fetch stats
+        return listOf(
+            DayData(1, 5, 10.0),
+            DayData(2, 7, 14.0),
+            DayData(3, 6, 12.0),
+            DayData(4, 8, 16.0),
+            DayData(5, 4, 8.0),
+            DayData(6, 9, 18.0),
+            DayData(7, 3, 6.0)
+        )
+    }
+
+    override suspend fun getMonthlyStatsForThisMonth(): List<DayData> {
+        val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
+        // subtract (dayOfMonth -1) days to get the 1st of current month
+        val startOfMonth = today.minus(today.dayOfMonth - 1, DateTimeUnit.DAY)
+        val dailyCounts = cigaretteDao.getCountsGroupedByDate(startOfMonth, today)
+
+        val costPerCig = calculateCostPerCigarette()
+        return dailyCounts.map { (date, count) ->
+            DayData(
+                day = date.dayOfMonth,
+                count = count,
+                cost = count * costPerCig
+            )
+        }
+    }
+
+    override suspend fun getYearlyStatsForThisYear(): List<MonthData> {
+        val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
+        // subtract (dayOfYear -1) to get Jan 1 of current year
+        val startOfYear = today.minus(today.dayOfYear - 1, DateTimeUnit.DAY)
+        val monthlyCounts = cigaretteDao.getCountsGroupedByMonth(startOfYear, today)
+
+        val costPerCig = calculateCostPerCigarette()
+        return monthlyCounts.map { (monthStr, totalCount) ->
+            val monthInt = monthStr.toIntOrNull() ?: 0
+            MonthData(
+                month = monthInt,      // e.g. 1..12
+                count = totalCount,
+                cost = totalCount * costPerCig
+            )
+        }
+    }
+
+
+
 }

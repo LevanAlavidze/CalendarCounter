@@ -2,8 +2,8 @@ package com.example.testforcalendarcounter.module
 
 import android.content.Context
 import androidx.room.Room
-import com.example.testforcalendarcounter.CigaretteRepository
-import com.example.testforcalendarcounter.CigaretteRepositoryImpl
+import com.example.testforcalendarcounter.repository.CigaretteRepository
+import com.example.testforcalendarcounter.repository.CigaretteRepositoryImpl
 import com.example.testforcalendarcounter.data.dao.CigaretteDao
 import com.example.testforcalendarcounter.data.dao.PackPriceDao
 import com.example.testforcalendarcounter.data.dao.TimerDao

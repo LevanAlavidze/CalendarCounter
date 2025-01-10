@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomSpinner" parent="@android:style/Widget.Spinner.DropDown">
+        <!-- Larger text size -->
+        <item name="android:textSize">16sp</item>
+        <!-- Some padding -->
+        <item name="android:padding">8dp</item>
+        <!-- If you want a custom background drawable -->
+        <item name="android:spinnerMode">dropdown</item>
+        <item name="android:dropDownVerticalOffset">10dp</item>
+        <item name="android:dropDownHorizontalOffset">10dp</item>
+    </style>
+</resources>

@@ -8,19 +8,19 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.testforcalendarcounter.SmokeFragment"
+        android:name="com.example.testforcalendarcounter.main.fragment.SmokeFragment"
         android:label="Main"
         tools:layout="@layout/fragment_smoke" />
 
     <fragment
         android:id="@+id/statisticsFragment"
-        android:name="com.example.testforcalendarcounter.StatisticsFragment"
+        android:name="com.example.testforcalendarcounter.statistics.fragment.StatisticsFragment"
         android:label="Statistics"
         tools:layout="@layout/fragment_statistics" />
 
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.testforcalendarcounter.SettingsFragment"
+        android:name="com.example.testforcalendarcounter.settings.fragment.SettingsFragment"
         android:label="Settings"
         tools:layout="@layout/fragment_settings" />
 </navigation>

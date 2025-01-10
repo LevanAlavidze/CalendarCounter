@@ -1,4 +1,4 @@
-package com.example.testforcalendarcounter
+package com.example.testforcalendarcounter.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

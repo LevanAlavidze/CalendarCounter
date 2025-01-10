@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomSpinner" parent="@android:style/Widget.Spinner.DropDown">
+        <!-- Possibly different textSize or color for dark mode -->
+        <item name="android:textSize">16sp</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:spinnerMode">dropdown</item>
+        <item name="android:dropDownVerticalOffset">10dp</item>
+        <item name="android:dropDownHorizontalOffset">10dp</item>
+        <!-- For example, you could set a different background color -->
+        <!--<item name="android:popupBackground">@color/myDarkPopup</item>-->
+    </style>
+</resources>

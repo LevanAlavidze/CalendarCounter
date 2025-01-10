@@ -1,8 +1,10 @@
-package com.example.testforcalendarcounter
+package com.example.testforcalendarcounter.repository
 
 import com.example.testforcalendarcounter.data.CigaretteEntry
 import com.example.testforcalendarcounter.data.packprice.PackPrice
 import com.example.testforcalendarcounter.data.timer.Timer
+import com.example.testforcalendarcounter.statistics.viewmodel.DayData
+import com.example.testforcalendarcounter.statistics.viewmodel.MonthData
 
 interface CigaretteRepository {
     // Counters
@@ -28,4 +30,10 @@ interface CigaretteRepository {
     suspend fun calculateDailyCost(): Pair<Int, Double>
     suspend fun calculateWeeklyCost(): Pair<Int, Double>
     suspend fun calculateMonthlyCost(): Pair<Int, Double>
+    suspend fun calculateYearlyCost(): Pair<Int, Double>
+
+    suspend fun getWeeklyStatsForLast7Days(): List<DayData>
+    suspend fun getMonthlyStatsForThisMonth(): List<DayData>
+    suspend fun getYearlyStatsForThisYear(): List<MonthData>
+
 }

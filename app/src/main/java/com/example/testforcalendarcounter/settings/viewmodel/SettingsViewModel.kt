@@ -1,10 +1,11 @@
-package com.example.testforcalendarcounter
+package com.example.testforcalendarcounter.settings.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testforcalendarcounter.data.packprice.PackPrice
+import com.example.testforcalendarcounter.repository.CigaretteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

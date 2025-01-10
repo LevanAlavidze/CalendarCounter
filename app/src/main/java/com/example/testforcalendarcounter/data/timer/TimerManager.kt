@@ -1,4 +1,4 @@
-package com.example.testforcalendarcounter
+package com.example.testforcalendarcounter.data.timer
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
