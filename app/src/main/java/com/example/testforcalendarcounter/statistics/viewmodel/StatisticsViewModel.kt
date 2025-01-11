@@ -57,9 +57,12 @@ class StatisticsViewModel @Inject constructor(
     }
 
     private suspend fun getMonthlyEntries(costMode: Boolean): List<BarEntry> {
+        // e.g. returns up to 31 DayData objects
         val monthlyData = repository.getMonthlyStatsForThisMonth()
+
         return monthlyData.map { dayData ->
-            val x = dayData.day.toFloat()
+            // day: 1..N
+            val x = (dayData.day - 1).toFloat()   // so Day1 => X=0
             val y = if (costMode) dayData.cost.toFloat() else dayData.count.toFloat()
             BarEntry(x, y)
         }

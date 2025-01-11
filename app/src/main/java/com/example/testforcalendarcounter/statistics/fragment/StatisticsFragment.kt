@@ -122,18 +122,22 @@ class StatisticsFragment : Fragment() {
         xAxis.labelRotationAngle = -45f
         xAxis.textColor = ContextCompat.getColor(requireContext(), textColor)
 
-        // Assign the label set based on which TimeRange is active
+        // Decide labels based on the time range
         when (viewModel.timeRange.value) {
             TimeRange.WEEKLY -> {
                 xAxis.valueFormatter = IndexAxisValueFormatter(listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"))
                 xAxis.labelCount = 7
             }
             TimeRange.MONTHLY -> {
-                xAxis.valueFormatter = IndexAxisValueFormatter(listOf("1", "6", "11", "16", "21", "26", "31"))
-                xAxis.labelCount = 7
+                // We'll assume your repository returns 28..31 bars depending on the month
+                // If Day1 => X=0, DayN => X=N-1, then entries.size = N
+                val daysInMonth = entries.size
+                val dayLabels = (1..daysInMonth).map { it.toString() }  // e.g., "1","2","3",...,"31"
+
+                xAxis.valueFormatter = IndexAxisValueFormatter(dayLabels)
+                xAxis.labelCount = daysInMonth
             }
             TimeRange.YEARLY -> {
-                // Empty index at [0], so index 1 = "Jan", 2 = "Feb", ... 12 = "Dec"
                 xAxis.valueFormatter = IndexAxisValueFormatter(
                     listOf("Jan", "Feb", "Mar", "Apr", "May", "Jun",
                         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
@@ -143,15 +147,12 @@ class StatisticsFragment : Fragment() {
             else -> Unit
         }
 
-        // Y-Axis styling
+        // Y-Axis
         val leftAxis = binding.statsBarChart.axisLeft
         leftAxis.axisMinimum = 0f
         leftAxis.textColor = ContextCompat.getColor(requireContext(), textColor)
 
-        // Disable right axis
-        binding.statsBarChart.axisRight.isEnabled = false
-
-        // 4) Refresh chart
+        // Refresh chart
         binding.statsBarChart.invalidate()
     }
 

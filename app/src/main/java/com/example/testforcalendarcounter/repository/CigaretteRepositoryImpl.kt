@@ -147,18 +147,39 @@ class CigaretteRepositoryImpl @Inject constructor(
 
     override suspend fun getMonthlyStatsForThisMonth(): List<DayData> {
         val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
-        // subtract (dayOfMonth -1) days to get the 1st of current month
+        // 1) Start of month (e.g., 2025-01-01)
         val startOfMonth = today.minus(today.dayOfMonth - 1, DateTimeUnit.DAY)
-        val dailyCounts = cigaretteDao.getCountsGroupedByDate(startOfMonth, today)
+        // 2) Days in month
+        val daysInMonth = startOfMonth.month.length(startOfMonth.isLeapYear())
+        // 3) End of month (1 + (daysInMonth - 1)) => e.g. 2025-01-31
+        val endOfMonth = startOfMonth.plus(daysInMonth - 1, DateTimeUnit.DAY)
 
+        // 4) DB query for date + sum
+        val dailyCounts = cigaretteDao.getCountsGroupedByDate(startOfMonth, endOfMonth)
+
+        // 5) Build a DayData list with cost
         val costPerCig = calculateCostPerCigarette()
-        return dailyCounts.map { (date, count) ->
-            DayData(
-                day = date.dayOfMonth,
-                count = count,
-                cost = count * costPerCig
+        val result = mutableListOf<DayData>()
+
+        // For each day 1..daysInMonth, find count
+        for (dayIndex in 1..daysInMonth) {
+            val currentDate = startOfMonth.plus(dayIndex - 1, DateTimeUnit.DAY)
+            val count = dailyCounts.find { it.date == currentDate }?.totalCount ?: 0
+            val cost = count * costPerCig
+            result.add(
+                DayData(
+                    day = dayIndex, // e.g. 1..31
+                    count = count,
+                    cost = cost
+                )
             )
         }
+
+        return result
+    }
+    private fun kotlinx.datetime.LocalDate.isLeapYear(): Boolean {
+        val y = this.year
+        return (y % 4 == 0 && y % 100 != 0) || (y % 400 == 0)
     }
 
     override suspend fun getYearlyStatsForThisYear(): List<MonthData> {
