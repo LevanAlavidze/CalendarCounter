@@ -15,6 +15,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
+import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.datetime.todayIn
 import javax.inject.Inject
@@ -115,17 +116,34 @@ class CigaretteRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getWeeklyStatsForLast7Days(): List<DayData> {
-        // Replace this with actual logic to fetch stats
-        return listOf(
-            DayData(1, 5, 10.0),
-            DayData(2, 7, 14.0),
-            DayData(3, 6, 12.0),
-            DayData(4, 8, 16.0),
-            DayData(5, 4, 8.0),
-            DayData(6, 9, 18.0),
-            DayData(7, 3, 6.0)
-        )
+        val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
+
+        // Monday=0, Tuesday=1, etc.
+        val daysFromMonday = today.dayOfWeek.ordinal
+        val startOfWeek = today.minus(daysFromMonday, DateTimeUnit.DAY)
+        val endOfWeek = startOfWeek.plus(6, DateTimeUnit.DAY)
+
+        // Grab date + sum from DB
+        val dailyCounts = cigaretteDao.getCountsGroupedByDate(startOfWeek, endOfWeek)
+        val costPerCig = calculateCostPerCigarette()
+
+        // Build a list of 7 day stats
+        val dayDataList = mutableListOf<DayData>()
+        for (i in 0..6) {
+            val date = startOfWeek.plus(i, DateTimeUnit.DAY)
+            val count = dailyCounts.find { it.date == date }?.totalCount ?: 0
+            val cost = count * costPerCig
+            dayDataList.add(
+                DayData(
+                    day = date.dayOfMonth, // or you could store dayOfWeek ordinal
+                    count = count,
+                    cost = cost
+                )
+            )
+        }
+        return dayDataList
     }
+
 
     override suspend fun getMonthlyStatsForThisMonth(): List<DayData> {
         val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
