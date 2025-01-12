@@ -74,6 +74,10 @@ dependencies {
     //Charts
     implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
+    //Lottie
+    implementation ("com.airbnb.android:lottie:6.0.0")
+
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

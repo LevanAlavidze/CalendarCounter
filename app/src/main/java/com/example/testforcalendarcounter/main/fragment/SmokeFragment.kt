@@ -1,6 +1,9 @@
 package com.example.testforcalendarcounter.main.fragment
 
+import android.animation.Animator
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,7 +43,32 @@ class SmokeFragment : Fragment() {
         }
 
         // Add Cigarette
-        binding.addCigaretteButton.setOnClickListener {
+        // Add Lottie Animation Listener
+        binding.cigaretteAnimationView.addAnimatorListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {
+                // Optional: do something when animation starts
+            }
+
+            override fun onAnimationEnd(animation: Animator) {
+                // Reset animation at the end
+                binding.cigaretteAnimationView.progress = 0f
+            }
+
+            override fun onAnimationCancel(animation: Animator) {
+                // Optional: handle cancel
+            }
+
+            override fun onAnimationRepeat(animation: Animator) {
+                // Optional: handle repeat
+            }
+        })
+
+        // Add click listener
+        binding.cigaretteAnimationView.setOnClickListener {
+            // Play the Lottie animation
+            binding.cigaretteAnimationView.playAnimation()
+
+            // Add cigarette to the database via ViewModel
             viewModel.addCigarette()
         }
 

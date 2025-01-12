@@ -111,12 +111,16 @@
         android:textSize="24sp" />
 
     <!-- Add Cigarette Button -->
-    <Button
-        android:id="@+id/addCigaretteButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <com.airbnb.lottie.LottieAnimationView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cigaretteAnimationView"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
         android:layout_gravity="center"
-        android:text="Add Cigarette"
-        android:padding="8dp" />
+        app:lottie_rawRes="@raw/cigarette_animation"
+        app:lottie_loop="false"
+        app:lottie_autoPlay="false" />
+
+
 
 </LinearLayout>
