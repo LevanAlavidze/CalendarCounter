@@ -4,20 +4,27 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.testforcalendarcounter.data.timer.TimerManager
 import com.example.testforcalendarcounter.data.CigaretteEntry
 import com.example.testforcalendarcounter.data.timer.Timer
-import com.example.testforcalendarcounter.repository.CigaretteRepository
+import com.example.testforcalendarcounter.data.timer.TimerManager
+import com.example.testforcalendarcounter.repository.cigarette.CigaretteRepository
+import com.example.testforcalendarcounter.repository.packprice.PackPriceRepository
+import com.example.testforcalendarcounter.repository.stats.StatsRepository
+import com.example.testforcalendarcounter.repository.timer.TimerRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SmokeViewModel @Inject constructor(
-    private val repository: CigaretteRepository,
+    private val cigaretteRepository: CigaretteRepository,
+    private val statsRepository: StatsRepository,         // For cost/stats
+    private val timerRepository: TimerRepository,         // For timer CRUD
+    private val packPriceRepository: PackPriceRepository, // For pack price & currency
     private val timerManager: TimerManager
-): ViewModel() {
+) : ViewModel() {
 
+    // region LiveData Exposed to UI
     private val _currency = MutableLiveData<String>()
     val currency: LiveData<String> get() = _currency
 
@@ -44,6 +51,7 @@ class SmokeViewModel @Inject constructor(
 
     private val _lastTenCigarettes = MutableLiveData<List<CigaretteEntry>>()
     val lastTenCigarettes: LiveData<List<CigaretteEntry>> = _lastTenCigarettes
+    // endregion
 
     init {
         refreshCounts()
@@ -52,27 +60,33 @@ class SmokeViewModel @Inject constructor(
         fetchCurrency()
     }
 
-    // Refresh counters and costs
+    // region Counters & Costs
     fun refreshCounts() {
         viewModelScope.launch {
-            _dayCigaretteCount.value = repository.getDailyCount()
-            _weekCigaretteCount.value = repository.getWeeklyCount()
-            _monthCigaretteCount.value = repository.getMonthlyCount()
-            _dailyCost.value = repository.calculateDailyCost()
-            _weeklyCost.value = repository.calculateWeeklyCost()
-            _monthlyCost.value = repository.calculateMonthlyCost()
+            // Basic counts from CigaretteRepository
+            _dayCigaretteCount.value = cigaretteRepository.getDailyCount()
+            _weekCigaretteCount.value = cigaretteRepository.getWeeklyCount()
+            _monthCigaretteCount.value = cigaretteRepository.getMonthlyCount()
+
+            // Cost calculations from StatsRepository
+            _dailyCost.value = statsRepository.calculateDailyCost()
+            _weeklyCost.value = statsRepository.calculateWeeklyCost()
+            _monthlyCost.value = statsRepository.calculateMonthlyCost()
         }
     }
+    // endregion
 
-    // Timer
+    // region Timer
     fun loadTimerState() {
         viewModelScope.launch {
-            val timer = repository.getTimer()
+            val timer = timerRepository.getTimer()
             if (timer != null && timer.isRunning) {
+                // Resume existing timer
                 timerManager.resumeTimer(timer.startTime) { formattedTime ->
                     _timer.postValue(formattedTime)
                 }
             } else {
+                // If no timer or not running
                 _timer.value = "Timer: 00:00:00"
             }
         }
@@ -80,57 +94,47 @@ class SmokeViewModel @Inject constructor(
 
     fun addCigarette() {
         viewModelScope.launch {
+            // Reset and start a new timer
             val startTime = System.currentTimeMillis()
             timerManager.resetAndStartTimer { formattedTime ->
                 _timer.postValue(formattedTime)
             }
-            repository.saveTimer(Timer(startTime = startTime, isRunning = true))
-            repository.addCigarette()
+            // Save new Timer in DB
+            timerRepository.saveTimer(Timer(startTime = startTime, isRunning = true))
+
+            // Add a cigarette
+            cigaretteRepository.addCigarette()
+
+            // Update UI
             refreshCounts()
-            fetchCurrency()   // To reflect changes in cost if currency changed
+            fetchCurrency()
             fetchLastTenCigarettes()
         }
     }
 
     fun deleteCigarette(entry: CigaretteEntry) {
         viewModelScope.launch {
-            repository.deleteCigarette(entry)
+            cigaretteRepository.deleteCigarette(entry)
             refreshCounts()
             fetchLastTenCigarettes()
         }
     }
+    // endregion
 
-    // Observing costs
-    fun calculateDailyCost() {
-        viewModelScope.launch {
-            _dailyCost.value = repository.calculateDailyCost()
-        }
-    }
-
-    fun calculateWeeklyCost() {
-        viewModelScope.launch {
-            _weeklyCost.value = repository.calculateWeeklyCost()
-        }
-    }
-
-    fun calculateMonthlyCost() {
-        viewModelScope.launch {
-            _monthlyCost.value = repository.calculateMonthlyCost()
-        }
-    }
-
-    // Last ten cigarettes
+    // region LastTenCigarettes
     fun fetchLastTenCigarettes() {
         viewModelScope.launch {
-            _lastTenCigarettes.value = repository.getLastTenCigarettes()
+            _lastTenCigarettes.value = cigaretteRepository.getLastTenCigarettes()
         }
     }
+    // endregion
 
-    // Currency
+    // region Pack Price / Currency
     fun fetchCurrency() {
         viewModelScope.launch {
-            val packPrice = repository.getPackPrice()
+            val packPrice = packPriceRepository.getPackPrice()
             _currency.postValue(packPrice?.currency ?: "USD")
         }
     }
+    // endregion
 }

@@ -108,7 +108,16 @@
         android:layout_gravity="center"
         android:text="Timer: 00:00:00"
         android:layout_marginBottom="16dp"
-        android:textSize="24sp" />
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/tvAddCigarette"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Tap to add Cigarette"
+        android:layout_marginBottom="0dp"
+        android:textSize="12sp" />
 
     <!-- Add Cigarette Button -->
     <com.airbnb.lottie.LottieAnimationView

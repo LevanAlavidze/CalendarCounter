@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.testforcalendarcounter.repository.CigaretteRepository
+import com.example.testforcalendarcounter.repository.stats.StatsRepository
 import com.github.mikephil.charting.data.BarEntry
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StatisticsViewModel @Inject constructor(
-    private val repository: CigaretteRepository
+    private val statsRepository: StatsRepository
 ) : ViewModel() {
 
     private val _chartEntries = MutableLiveData<List<BarEntry>>()
@@ -24,16 +24,27 @@ class StatisticsViewModel @Inject constructor(
     private val _isCostMode = MutableLiveData<Boolean>(false)
     val isCostMode: LiveData<Boolean> = _isCostMode
 
+    /**
+     * Update the time range for stats (WEEKLY, MONTHLY, YEARLY),
+     * then refresh the chart data.
+     */
     fun setTimeRange(range: TimeRange) {
         _timeRange.value = range
         refreshData()
     }
 
+    /**
+     * Toggle between "count" mode or "cost" mode on the charts.
+     */
     fun toggleCostMode(isCost: Boolean) {
         _isCostMode.value = isCost
         refreshData()
     }
 
+    /**
+     * Re-fetch data from StatsRepository based on the current
+     * time range and mode.
+     */
     fun refreshData() {
         viewModelScope.launch {
             val range = _timeRange.value ?: TimeRange.WEEKLY
@@ -49,7 +60,8 @@ class StatisticsViewModel @Inject constructor(
     }
 
     private suspend fun getWeeklyEntries(costMode: Boolean): List<BarEntry> {
-        val weeklyData = repository.getWeeklyStatsForLast7Days() // Example method
+        // Fetch 7 days of data from StatsRepository
+        val weeklyData = statsRepository.getWeeklyStatsForLast7Days()
         return weeklyData.mapIndexed { index, dayData ->
             val yValue = if (costMode) dayData.cost.toFloat() else dayData.count.toFloat()
             BarEntry(index.toFloat(), yValue)
@@ -57,9 +69,8 @@ class StatisticsViewModel @Inject constructor(
     }
 
     private suspend fun getMonthlyEntries(costMode: Boolean): List<BarEntry> {
-        // e.g. returns up to 31 DayData objects
-        val monthlyData = repository.getMonthlyStatsForThisMonth()
-
+        // e.g. returns up to 31 DayData objects for the current month
+        val monthlyData = statsRepository.getMonthlyStatsForThisMonth()
         return monthlyData.map { dayData ->
             // day: 1..N
             val x = (dayData.day - 1).toFloat()   // so Day1 => X=0
@@ -69,7 +80,8 @@ class StatisticsViewModel @Inject constructor(
     }
 
     private suspend fun getYearlyEntries(costMode: Boolean): List<BarEntry> {
-        val yearlyData = repository.getYearlyStatsForThisYear() // Retrieve stats for the year
+        // Retrieve stats for the current year (1..12 months)
+        val yearlyData = statsRepository.getYearlyStatsForThisYear()
         val entries = mutableListOf<BarEntry>()
 
         // Create a map for quick lookup of stats by month
@@ -80,16 +92,20 @@ class StatisticsViewModel @Inject constructor(
             val yValue = dataMap[month]?.let {
                 if (costMode) it.cost.toFloat() else it.count.toFloat()
             } ?: 0f // Default to 0 if no data for the month
-            entries.add(BarEntry((month -1 ).toFloat(), yValue))
+            entries.add(BarEntry((month - 1).toFloat(), yValue))
         }
-
         return entries
     }
 }
+
+// region Supporting Enums & Data Classes
 
 enum class TimeRange {
     WEEKLY, MONTHLY, YEARLY
 }
 
+// If you're storing these in StatsRepository or separate files, that's fine too.
 data class DayData(val day: Int, val count: Int, val cost: Double)
 data class MonthData(val month: Int, val count: Int, val cost: Double)
+
+// endregion
