@@ -6,27 +6,50 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Pack Price Display -->
+    <!-- Pack Price Display / Buttons -->
     <TextView
         android:id="@+id/packPriceTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Pack Price (20 Cigarettes)"
-        android:textSize="18sp"
-        android:paddingBottom="16dp" />
+        android:text="Pack Price (for 20 cigarettes):"
+        android:textSize="16sp"
+        android:paddingBottom="8dp" />
+
     <TextView
         android:id="@+id/PriceTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="$0"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:paddingBottom="16dp" />
 
-    <!-- Change Pack Price Button -->
     <Button
         android:id="@+id/changePackPriceButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Change Pack Price" />
+
+    <!-- Baseline Daily Usage -->
+    <TextView
+        android:id="@+id/baselineLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Baseline (prev. cigs/day):"
+        android:textSize="16sp"
+        android:layout_marginTop="24dp" />
+
+    <EditText
+        android:id="@+id/baselineEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="e.g. 20"
+        android:inputType="number"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/saveBaselineButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save Baseline" />
 
 </LinearLayout>

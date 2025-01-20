@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "fc1c31edbe462d7a681d107c6d9eee12",
+    "identityHash": "caf287f6894038f896ad63d3ea597852",
     "entities": [
       {
         "tableName": "CigaretteEntry",
@@ -105,12 +105,38 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "user_settings",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `baselineCigsPerDay` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "baselineCigsPerDay",
+            "columnName": "baselineCigsPerDay",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fc1c31edbe462d7a681d107c6d9eee12')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'caf287f6894038f896ad63d3ea597852')"
     ]
   }
 }

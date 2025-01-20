@@ -83,6 +83,10 @@ class SmokeFragment : Fragment() {
             }
         }
 
+        viewModel.dailySavings.observe(viewLifecycleOwner) {moneySaved ->
+            binding.tvSavings.text = "You've saved: %.2f".format(moneySaved)
+        }
+
         // 3) Last ten cigarettes
         viewModel.lastTenCigarettes.observe(viewLifecycleOwner) { entries ->
             lastTenAdapter.setData(entries)

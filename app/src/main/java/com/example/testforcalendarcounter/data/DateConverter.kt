@@ -5,9 +5,14 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toLocalDate
 
 class DateConverter {
-    @TypeConverter
-    fun fromStringToDate(value: String): LocalDate = value.toLocalDate()
 
     @TypeConverter
-    fun fromDateToString(date: LocalDate): String = date.toString()
+    fun fromStringToDate(value: String?): LocalDate? {
+        return value?.toLocalDate()
+    }
+
+    @TypeConverter
+    fun fromDateToString(date: LocalDate?): String? {
+        return date?.toString()
+    }
 }

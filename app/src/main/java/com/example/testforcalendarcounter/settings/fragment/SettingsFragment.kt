@@ -45,6 +45,18 @@ class SettingsFragment : Fragment() {
         binding.changePackPriceButton.setOnClickListener {
             showChangePackPriceDialog()
         }
+
+        settingsViewModel.baselineCigs.observe(viewLifecycleOwner) {baseline ->
+            binding.baselineEditText.setText(baseline.toString())
+        }
+
+        binding.saveBaselineButton.setOnClickListener{
+            val baselineStr = binding.baselineEditText.text.toString()
+            val baseline = baselineStr.toIntOrNull() ?:0
+            settingsViewModel.updateBaseLine(baseline)
+        }
+
+
     }
 
     private fun showChangePackPriceDialog() {

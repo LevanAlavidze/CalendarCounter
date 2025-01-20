@@ -1,6 +1,7 @@
 package com.example.testforcalendarcounter.repository.stats
 
 import android.util.Log
+import com.example.testforcalendarcounter.data.dao.CigaretteDao
 import com.example.testforcalendarcounter.repository.cigarette.CigaretteRepository
 import com.example.testforcalendarcounter.repository.packprice.PackPriceRepository
 import com.example.testforcalendarcounter.statistics.viewmodel.DayData
@@ -14,6 +15,7 @@ import javax.inject.Inject
 class StatsRepositoryImpl @Inject constructor(
     private val cigaretteRepository: CigaretteRepository,
     private val packPriceRepository: PackPriceRepository,
+    private val cigaretteDao: CigaretteDao
 ) : StatsRepository {
 
     // region Cost Calculations
@@ -103,9 +105,8 @@ class StatsRepositoryImpl @Inject constructor(
         val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
         val startOfYear = today.minus(today.dayOfYear - 1, DateTimeUnit.DAY)
 
-        // Suppose you have a DAO method returning month -> sum
-        val monthlyCounts = /* cigaretteDao.getCountsGroupedByMonth(startOfYear, today) */
-            emptyList<Pair<String,Int>>() // placeholder
+        // Call the real DAO method instead of returning emptyList
+        val monthlyCounts = cigaretteDao.getCountsGroupedByMonth(startOfYear, today)
 
         val costPerCig = packPriceRepository.calculateCostPerCigarette()
         monthlyCounts.map { (monthStr, totalCount) ->

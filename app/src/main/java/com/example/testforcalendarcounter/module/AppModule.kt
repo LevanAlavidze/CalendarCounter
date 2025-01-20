@@ -7,7 +7,10 @@ import com.example.testforcalendarcounter.repository.cigarette.CigaretteReposito
 import com.example.testforcalendarcounter.data.dao.CigaretteDao
 import com.example.testforcalendarcounter.data.dao.PackPriceDao
 import com.example.testforcalendarcounter.data.dao.TimerDao
+import com.example.testforcalendarcounter.data.dao.UserSettingsDao
 import com.example.testforcalendarcounter.dataBase.CigaretteDatabase
+import com.example.testforcalendarcounter.repository.Settings.UserSettingsRepository
+import com.example.testforcalendarcounter.repository.Settings.UserSettingsRepositoryImpl
 import com.example.testforcalendarcounter.repository.packprice.PackPriceRepository
 import com.example.testforcalendarcounter.repository.packprice.PackPriceRepositoryImpl
 import com.example.testforcalendarcounter.repository.stats.StatsRepository
@@ -51,6 +54,10 @@ object AppModule {
     @Singleton
     fun providePackPriceDao(db: CigaretteDatabase): PackPriceDao = db.packPriceDao()
 
+    @Provides
+    @Singleton
+    fun provideUserSettingsDao(db: CigaretteDatabase): UserSettingsDao = db.userSettingsDao()
+
     // 3) Provide each repository separately
     @Provides
     @Singleton
@@ -80,9 +87,19 @@ object AppModule {
     @Singleton
     fun provideStatsRepository(
         cigaretteRepository: CigaretteRepository,
-        packPriceRepository: PackPriceRepository
+        packPriceRepository: PackPriceRepository,
+        cigaretteDao: CigaretteDao
     ): StatsRepository {
-        return StatsRepositoryImpl(cigaretteRepository, packPriceRepository)
+        return StatsRepositoryImpl(cigaretteRepository, packPriceRepository, cigaretteDao)
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideUserSettingsRepository(
+        userSettingsDao: UserSettingsDao
+    ): UserSettingsRepository {
+        return UserSettingsRepositoryImpl(userSettingsDao)
     }
 
     // 4) Provide a coroutine dispatcher if needed

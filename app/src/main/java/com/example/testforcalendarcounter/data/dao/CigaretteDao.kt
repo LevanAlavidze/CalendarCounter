@@ -48,6 +48,8 @@ interface CigaretteDao {
     """)
     suspend fun getCountsGroupedByMonth(startDate: LocalDate, endDate: LocalDate): List<MonthCount>
 
+
+
 }
 
 data class DateCount(
