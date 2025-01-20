@@ -7,9 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.example.testforcalendarcounter.R
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testforcalendarcounter.adapter.LastTenAdapter
 import com.example.testforcalendarcounter.databinding.FragmentSmokeBinding
+import com.example.testforcalendarcounter.enums.MoodLevel
 import com.example.testforcalendarcounter.main.viewmodel.SmokeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -30,6 +32,7 @@ class SmokeFragment : Fragment() {
         _binding = FragmentSmokeBinding.inflate(inflater, container, false)
         return binding.root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,10 +55,17 @@ class SmokeFragment : Fragment() {
             override fun onAnimationRepeat(animation: Animator) { /* no-op */ }
         })
 
+
         // Add click listener to play animation + add a cigarette
         binding.cigaretteAnimationView.setOnClickListener {
             binding.cigaretteAnimationView.playAnimation()
             viewModel.addCigarette()
+        }
+
+        viewModel.moodLevel.observe(viewLifecycleOwner){mood ->
+            displayMood(mood)
+            val segment = moodToProgress(mood)
+            binding.moodProgressBar.progress = segment
         }
 
         // Observe ViewModel data
@@ -97,6 +107,44 @@ class SmokeFragment : Fragment() {
             binding.tvTimer.text = time
         }
     }
+
+    private fun displayMood(mood: MoodLevel) {
+        when (mood) {
+            MoodLevel.VERY_GOOD -> {
+                binding.ivSmiley.setImageResource(R.drawable.smile_very_good)
+                binding.tvSmileyLabel.text = "Very Good"
+            }
+            MoodLevel.GOOD -> {
+                binding.ivSmiley.setImageResource(R.drawable.smile_good)
+                binding.tvSmileyLabel.text = "Good"
+            }
+            MoodLevel.FINE -> {
+                binding.ivSmiley.setImageResource(R.drawable.smile_fine)
+                binding.tvSmileyLabel.text = "Fine"
+            }
+            MoodLevel.BAD -> {
+                binding.ivSmiley.setImageResource(R.drawable.smile_bad)
+                binding.tvSmileyLabel.text = "Bad"
+            }
+            MoodLevel.VERY_BAD -> {
+                binding.ivSmiley.setImageResource(R.drawable.smile_very_bad)
+                binding.tvSmileyLabel.text = "Very Bad"
+            }
+        }
+    }
+
+    private fun moodToProgress(mood: MoodLevel): Int {
+        return when (mood) {
+            MoodLevel.VERY_GOOD -> 0
+            MoodLevel.GOOD -> 1
+            MoodLevel.FINE -> 2
+            MoodLevel.BAD -> 3
+            MoodLevel.VERY_BAD -> 4
+        }
+    }
+
+
+
 
     override fun onResume() {
         super.onResume()

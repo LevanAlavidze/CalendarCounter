@@ -16,9 +16,9 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginEnd="16dp"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/dailyCountTextView"
@@ -41,9 +41,9 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginEnd="16dp"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/weeklyCountTextView"
@@ -66,8 +66,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/monthlyCountTextView"
@@ -106,40 +106,89 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Timer: 00:00:00"
         android:layout_marginBottom="16dp"
+        android:text="Timer: 00:00:00"
         android:textSize="30sp" />
 
-    <TextView
-        android:id="@+id/tvSavings"
+    <!-- Savings text (optional) -->
+
+
+    <!-- NEW: Custom Mood Layout (Smiley + Label) -->
+    <!-- NEW: Custom Mood Layout (Smiley + Label + ProgressBar + Savings) -->
+    <LinearLayout
+        android:id="@+id/layoutSmiley"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="4dp"
-        android:text="You Saved 0"
-        android:textSize="12sp"/>
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:layout_marginBottom="8dp">
+
+        <!-- Smiley and Mood Label -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_marginBottom="8dp">
+
+            <ImageView
+                android:id="@+id/ivSmiley"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/smile_fine" />
+
+            <TextView
+                android:id="@+id/tvSmileyLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fine"
+                android:textSize="16sp"
+                android:layout_marginStart="8dp" />
+        </LinearLayout>
 
 
+        <!-- Progress Bar -->
+        <ProgressBar
+            android:id="@+id/moodProgressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:indeterminate="false"
+            android:max="4"
+            android:progress="0"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Savings Text -->
+        <TextView
+            android:id="@+id/tvSavings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You've Saved: 0"
+            android:textSize="12sp"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+
+    <!-- Text that explains how to add cigarette -->
     <TextView
         android:id="@+id/tvAddCigarette"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="Tap to add Cigarette"
-        android:layout_marginBottom="0dp"
         android:textSize="12sp" />
 
-    <!-- Add Cigarette Button -->
+    <!-- Lottie Animation View for adding a cigarette -->
     <com.airbnb.lottie.LottieAnimationView
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/cigaretteAnimationView"
-        android:layout_width="200dp"
+        android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
         app:lottie_rawRes="@raw/cigarette_animation"
         app:lottie_loop="false"
         app:lottie_autoPlay="false" />
-
-
 
 </LinearLayout>

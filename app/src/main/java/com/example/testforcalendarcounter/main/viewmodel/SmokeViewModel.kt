@@ -5,8 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testforcalendarcounter.data.CigaretteEntry
+import com.example.testforcalendarcounter.data.UserSettings
 import com.example.testforcalendarcounter.data.timer.Timer
 import com.example.testforcalendarcounter.data.timer.TimerManager
+import com.example.testforcalendarcounter.enums.MoodLevel
 import com.example.testforcalendarcounter.repository.Settings.UserSettingsRepository
 import com.example.testforcalendarcounter.repository.cigarette.CigaretteRepository
 import com.example.testforcalendarcounter.repository.packprice.PackPriceRepository
@@ -23,7 +25,7 @@ class SmokeViewModel @Inject constructor(
     private val timerRepository: TimerRepository,         // For timer CRUD
     private val packPriceRepository: PackPriceRepository, // For pack price & currency
     private val timerManager: TimerManager,
-    private val userSettingsRepository: UserSettingsRepository
+    private val userSettingsRepository: UserSettingsRepository,
 ) : ViewModel() {
 
     // region LiveData Exposed to UI
@@ -54,6 +56,9 @@ class SmokeViewModel @Inject constructor(
     private val _dailySavings = MutableLiveData<Double>()
     val dailySavings: LiveData<Double> = _dailySavings
 
+    private val _moodLevel = MutableLiveData<MoodLevel>()
+    val moodLevel: LiveData<MoodLevel> = _moodLevel
+
     private val _lastTenCigarettes = MutableLiveData<List<CigaretteEntry>>()
     val lastTenCigarettes: LiveData<List<CigaretteEntry>> = _lastTenCigarettes
     // endregion
@@ -82,10 +87,10 @@ class SmokeViewModel @Inject constructor(
             //    a) current daily usage (already have it: dayCount)
             //    b) baseline from DB (UserSettings table or repo)
             val userSettings = userSettingsRepository.getUserSettings()
-            val baseline = userSettings?.baselineCigsPerDay ?: 0
+            val baselineCigs = userSettings?.baselineCigsPerDay ?: 0
 
             //    c) cigsSaved = (baseline - currentDailyCount) if positive
-            val cigsSaved = (baseline - dayCount).coerceAtLeast(0)
+            val cigsSaved = (baselineCigs - dayCount).coerceAtLeast(0)
 
             //    d) costPerCig can be from your PackPriceRepository or StatsRepository
             //       (whichever is your single source of truth).
@@ -102,6 +107,10 @@ class SmokeViewModel @Inject constructor(
             _monthlyCost.value = monthlyCostPair
 
             _dailySavings.value = moneySaved
+
+
+            val mood = computedMoodLevel(baselineCigs,dayCount)
+            _moodLevel.postValue(mood)
         }
     }
     // endregion
@@ -141,6 +150,33 @@ class SmokeViewModel @Inject constructor(
             fetchLastTenCigarettes()
         }
     }
+
+    fun computedMoodLevel(
+        baseline: Int,
+        currentDailyCount: Int
+    ): MoodLevel {
+        if (baseline <=0){
+            return MoodLevel.VERY_GOOD
+        }
+
+        val segmentSize = baseline/5.0
+
+        val ratio = currentDailyCount / segmentSize
+        val segmentIndex = ratio.toInt()
+
+        val clampedSegment = segmentIndex.coerceIn(0,4)
+
+        return when (clampedSegment){
+            0 -> MoodLevel.VERY_GOOD
+            1 -> MoodLevel.GOOD
+            2 -> MoodLevel.FINE
+            3 -> MoodLevel.BAD
+            else -> MoodLevel.VERY_BAD
+        }
+
+
+    }
+
 
     fun deleteCigarette(entry: CigaretteEntry) {
         viewModelScope.launch {
