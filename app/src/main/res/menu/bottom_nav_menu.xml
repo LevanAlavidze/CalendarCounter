@@ -14,4 +14,10 @@
         android:id="@+id/settingsFragment"
         android:icon="@drawable/ic_settings"
         android:title="Settings" />
+
+    <item
+        android:id="@+id/healthFragment"
+        android:icon="@drawable/ic_health"
+        android:title="Health" />
+
 </menu>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <!-- Title + Description in one or two lines -->
+    <TextView
+        android:id="@+id/tvAchievementText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="After 20 minutes: Your blood pressure and heart rate decrease."
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:paddingBottom="4dp"/>
+
+    <!-- Progress Row: bar + text on the right -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ProgressBar
+            android:id="@+id/pbAchievement"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:max="100"
+            android:progress="0"/>
+
+        <!-- Show e.g. "100%" or "Achieved" -->
+        <TextView
+            android:id="@+id/tvAchievementProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="0%"
+            android:textSize="14sp"/>
+    </LinearLayout>
+</LinearLayout>
