@@ -180,11 +180,38 @@ class SmokeViewModel @Inject constructor(
 
     fun deleteCigarette(entry: CigaretteEntry) {
         viewModelScope.launch {
+            // 1) Actually delete the cigarette
             cigaretteRepository.deleteCigarette(entry)
+
+            // 2) Fetch the new "last smoked" entry
+            val updatedLastEntries = cigaretteRepository.getLastTenCigarettes()
+            val newLastEntry = updatedLastEntries.firstOrNull()
+
+            if (newLastEntry != null) {
+                // We have at least one entry left in DB.
+                // Make sure timer is set to start from newLastEntry's timestamp
+                val newStartTime = newLastEntry.timestamp
+
+                // 2a) Save new Timer to DB
+                timerRepository.saveTimer(Timer(startTime = newStartTime, isRunning = true))
+
+                // 2b) Reset the running timer in your TimerManager so it
+                //     counts up from newStartTime
+
+            } else {
+                // 3) If there are NO entries left, we can stop the timer
+                timerRepository.saveTimer(Timer(startTime = 0, isRunning = false))
+                _timer.postValue("Timer: 00:00:00")
+            }
+
+            // 4) Update UI
             refreshCounts()
             fetchLastTenCigarettes()
+            loadTimerState()
+
         }
     }
+
     // endregion
 
     // region LastTenCigarettes
