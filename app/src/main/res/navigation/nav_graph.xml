@@ -6,6 +6,7 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/mainFragment">
 
+    <!-- Other fragment destinations -->
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.example.testforcalendarcounter.main.fragment.SmokeFragment"
@@ -28,5 +29,33 @@
         android:id="@+id/healthFragment"
         android:name="com.example.testforcalendarcounter.health.HealthFragment"
         android:label="Health"
-        tools:layout="@layout/fragment_health"/>
+        tools:layout="@layout/fragment_health" />
+
+    <!-- Games Section -->
+    <fragment
+        android:id="@+id/gamesFragment"
+        android:name="com.example.testforcalendarcounter.games.fragment.GamesFragment"
+        android:label="Games"
+        tools:layout="@layout/fragment_games" />
+
+    <!-- Game Destinations -->
+    <fragment
+        android:id="@+id/memoryGameFragment"
+        android:name="com.example.testforcalendarcounter.memorygame.MemoryGameFragment"
+        android:label="Memory Game"
+        tools:layout="@layout/fragment_memory_game" />
+    <fragment
+        android:id="@+id/tapGameFragment"
+        android:name="com.example.testforcalendarcounter.tapGame.fragment.TapGameFragment"
+        android:label="Tap Game"
+        tools:layout="@layout/fragment_tap_game" />
+
+    <!-- Global actions -->
+    <action
+        android:id="@+id/action_global_memoryGameFragment"
+        app:destination="@id/memoryGameFragment" />
+
+    <action
+        android:id="@+id/action_global_tapGameFragment"
+        app:destination="@id/tapGameFragment" />
 </navigation>

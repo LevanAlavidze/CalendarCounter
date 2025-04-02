@@ -20,4 +20,12 @@
         android:icon="@drawable/ic_health"
         android:title="Health" />
 
+
+    <item
+        android:id="@+id/gamesFragment"
+        android:icon="@drawable/ic_games"
+        android:title="Games" />
+
+
+
 </menu>

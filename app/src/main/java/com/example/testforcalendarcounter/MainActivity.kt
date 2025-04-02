@@ -27,8 +27,12 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNavigation.setupWithNavController(navController)
 
-        //  setupActionBarWithNavController(navController)
-
+        navController.addOnDestinationChangedListener{_, destination, _ ->
+            val gamesDestination = setOf(R.id.gamesFragment, R.id.memoryGameFragment, R.id.tapGameFragment)
+            if (destination.id in gamesDestination){
+                binding.bottomNavigation.menu.findItem(R.id.gamesFragment).isChecked = true
+            }
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
