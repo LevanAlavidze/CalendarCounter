@@ -49,6 +49,11 @@
         android:name="com.example.testforcalendarcounter.tapGame.fragment.TapGameFragment"
         android:label="Tap Game"
         tools:layout="@layout/fragment_tap_game" />
+    <fragment
+        android:id="@+id/breathingTimerFragment"
+        android:name="com.example.testforcalendarcounter.breath.fragment.BreathingTimerFragment"
+        android:label="Breath Game"
+        tools:layout="@layout/fragment_breathing_timer" />
 
     <!-- Global actions -->
     <action
