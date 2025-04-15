@@ -1,6 +1,5 @@
 package com.example.testforcalendarcounter.settings.fragment
 
-import android.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +9,7 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.testforcalendarcounter.settings.viewmodel.SettingsViewModel
 import com.example.testforcalendarcounter.databinding.DialogPackPriceBinding
 import com.example.testforcalendarcounter.databinding.FragmentSettingsBinding
@@ -56,6 +56,10 @@ class SettingsFragment : Fragment() {
             settingsViewModel.updateBaseLine(baseline)
         }
 
+        binding.btnOpenColors.setOnClickListener{
+            findNavController().navigate(com.example.testforcalendarcounter.R.id.colorsFragment)
+        }
+
 
     }
 
@@ -63,7 +67,7 @@ class SettingsFragment : Fragment() {
         val dialogBinding = DialogPackPriceBinding.inflate(layoutInflater)
         val currencySpinner: Spinner = dialogBinding.currencySpinner
         val currencies = listOf("USD", "EUR", "GEL")
-        currencySpinner.adapter = ArrayAdapter(requireContext(), R.layout.simple_spinner_item, currencies)
+        currencySpinner.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, currencies)
 
         val dialog = MaterialAlertDialogBuilder(requireContext())
             .setView(dialogBinding.root)

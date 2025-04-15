@@ -80,6 +80,9 @@ dependencies {
     //Lottie
     implementation ("com.airbnb.android:lottie:6.0.0")
 
+    //Gson
+    implementation ("com.google.code.gson:gson:2.10.1")
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -26,6 +26,13 @@
         tools:layout="@layout/fragment_settings" />
 
     <fragment
+        android:id="@+id/colorsFragment"
+        android:name="com.example.testforcalendarcounter.settings.settings_colors.ColorsFragment"
+        android:label="Colors"
+        tools:layout="@layout/fragment_colors" />
+
+
+    <fragment
         android:id="@+id/healthFragment"
         android:name="com.example.testforcalendarcounter.health.HealthFragment"
         android:label="Health"
@@ -54,6 +61,12 @@
         android:name="com.example.testforcalendarcounter.breath.fragment.BreathingTimerFragment"
         android:label="Breath Game"
         tools:layout="@layout/fragment_breathing_timer" />
+
+    <fragment
+        android:id="@+id/quizFragment"
+        android:name="com.example.testforcalendarcounter.quiz.fragment.QuizFragment"
+        android:label="Quiz Game"
+        tools:layout="@layout/fragment_quiz" />
 
     <!-- Global actions -->
     <action

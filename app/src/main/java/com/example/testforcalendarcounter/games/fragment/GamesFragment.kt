@@ -35,7 +35,12 @@ class GamesFragment : Fragment() {
             title = "Breathing Timer",
             iconResId = R.drawable.ic_breath, // Replace with your actual icon resource
             destinationId = R.id.breathingTimerFragment
-    )
+        ),
+        GameItem(
+            title = "Quiz",
+            iconResId = R.drawable.ic_quiz, // Replace with your actual icon resource
+            destinationId = R.id.quizFragment
+        )
     )
 
     override fun onCreateView(

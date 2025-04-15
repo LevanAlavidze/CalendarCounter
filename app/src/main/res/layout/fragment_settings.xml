@@ -52,4 +52,11 @@
         android:layout_height="wrap_content"
         android:text="Save Baseline" />
 
+    <Button
+        android:id="@+id/btnOpenColors"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Background Colors"
+        android:layout_marginTop="24dp" />
+
 </LinearLayout>

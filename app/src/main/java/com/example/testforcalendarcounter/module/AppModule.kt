@@ -13,10 +13,13 @@ import com.example.testforcalendarcounter.repository.Settings.UserSettingsReposi
 import com.example.testforcalendarcounter.repository.Settings.UserSettingsRepositoryImpl
 import com.example.testforcalendarcounter.repository.packprice.PackPriceRepository
 import com.example.testforcalendarcounter.repository.packprice.PackPriceRepositoryImpl
+import com.example.testforcalendarcounter.repository.quiz.QuizRepository
+import com.example.testforcalendarcounter.repository.quiz.QuizRepositoryImpl
 import com.example.testforcalendarcounter.repository.stats.StatsRepository
 import com.example.testforcalendarcounter.repository.stats.StatsRepositoryImpl
 import com.example.testforcalendarcounter.repository.timer.TimerRepository
 import com.example.testforcalendarcounter.repository.timer.TimerRepositoryImpl
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -82,6 +85,15 @@ object AppModule {
     ): PackPriceRepository {
         return PackPriceRepositoryImpl(packPriceDao)
     }
+
+    @Provides
+    @Singleton
+    fun provideQuizRepository(
+        @ApplicationContext context: Context
+    ): QuizRepository {
+        return QuizRepositoryImpl(context)
+    }
+
 
     @Provides
     @Singleton

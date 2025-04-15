@@ -1,0 +1,72 @@
+<!-- res/layout/fragment_colors.xml -->
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Use system default theme checkbox -->
+        <CheckBox
+            android:id="@+id/checkboxSystemDefault"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Use system default theme" />
+
+        <!-- Header for solid colors -->
+        <TextView
+            android:id="@+id/tvSolidHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Background Colors"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
+
+        <!-- Custom GridView for solid colors (5 columns) -->
+        <com.example.testforcalendarcounter.settings.settings_colors.ExpandedGridView
+            android:id="@+id/gridViewSolid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:numColumns="5"
+            android:verticalSpacing="8dp"
+            android:horizontalSpacing="8dp"
+            android:stretchMode="columnWidth"
+            android:gravity="center" />
+
+        <!-- Header for gradients -->
+        <TextView
+            android:id="@+id/tvGradientHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gradient Options"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
+
+        <!-- Custom GridView for gradient backgrounds (3 columns) -->
+        <com.example.testforcalendarcounter.settings.settings_colors.ExpandedGridView
+            android:id="@+id/gridViewGradient"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:numColumns="3"
+            android:verticalSpacing="8dp"
+            android:horizontalSpacing="8dp"
+            android:stretchMode="columnWidth"
+            android:gravity="center" />
+
+        <!-- Save Button -->
+        <Button
+            android:id="@+id/btnSaveBackground"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save Background"
+            android:layout_marginTop="16dp"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+</ScrollView>

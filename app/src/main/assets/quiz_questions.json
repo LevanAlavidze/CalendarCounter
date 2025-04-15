@@ -1,0 +1,32 @@
+[
+  {
+    "question": "What is the most effective method to quit smoking?",
+    "choices": ["Cold turkey", "Nicotine replacement", "Gradual reduction", "E-cigarettes"],
+    "correctAnswer": 1
+  },
+  {
+    "question": "Which organ recovers most rapidly after quitting smoking?",
+    "choices": ["Heart", "Lungs", "Liver", "Kidneys"],
+    "correctAnswer": 1
+  },
+  {
+    "question": "How many minutes of life are lost per cigarette on average?",
+    "choices": ["3 minutes", "11 minutes", "15 minutes", "20 minutes"],
+    "correctAnswer": 1
+  },
+  {
+    "question": "What percentage of lung cancer cases are attributed to smoking?",
+    "choices": ["30%", "50%", "80%", "90%"],
+    "correctAnswer": 2
+  },
+  {
+    "question": "Which of these is not a common smoking cessation aid?",
+    "choices": ["Nicotine gum", "E-cigarettes", "Valium", "Nicotine patch"],
+    "correctAnswer": 2
+  },
+  {
+    "question": "Quitting smoking can improve which of the following almost immediately?",
+    "choices": ["Blood pressure", "Sense of smell", "Vision", "Hearing"],
+    "correctAnswer": 1
+  }
+]
