@@ -18,24 +18,28 @@ class ColorGridAdapter(
     override fun getItemId(position: Int): Long = position.toLong()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val view = convertView ?: View(context)
+        val view = convertView ?: View(context).apply {
+            val sizeDp = 80
+            val sizePx = (sizeDp * context.resources.displayMetrics.density).toInt()
+            layoutParams = ViewGroup.LayoutParams(sizePx, sizePx)
+            background = ContextCompat.getDrawable(context, com.example.testforcalendarcounter.R.drawable.color_preview_background)
+        }
 
-        // 100dp in px
-        val sizePx = (100 * context.resources.displayMetrics.density).toInt()
-        view.layoutParams = ViewGroup.LayoutParams(sizePx, sizePx)
+        /*val sizeDp = 80
+        val sizePx = (sizeDp * context.resources.displayMetrics.density).toInt()
+        view.layoutParams = ViewGroup.LayoutParams(sizePx, sizePx)*/
 
         val item = items[position]
         try {
-            // If it's a valid color hex
+            // Attempt to treat the item as a color hex code.
             view.setBackgroundColor(Color.parseColor(item))
         } catch (e: Exception) {
-            // Otherwise treat it as a drawable name
+            // Otherwise, treat it as a drawable resource name.
             val resId = context.resources.getIdentifier(item, "drawable", context.packageName)
             if (resId != 0) {
                 val drawable: Drawable? = ContextCompat.getDrawable(context, resId)
                 view.background = drawable
             } else {
-                // Fallback
                 view.setBackgroundColor(Color.LTGRAY)
             }
         }

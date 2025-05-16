@@ -62,6 +62,12 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    fun isColorDark(color: Int): Boolean {
+        val darkness = 1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255
+        return darkness >= 0.5
+    }
+
+
     override fun onResume() {
         super.onResume()
         accelerometer?.also { sensor ->
@@ -69,6 +75,15 @@ class MainActivity : AppCompatActivity() {
         }
         //applyBackgroundFromPreferences()
 
+    }
+
+    override fun onPause() {
+        super.onPause()
+        sensorManager.unregisterListener(shakeDetector)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
     fun applyBackgroundFromPreferences() {
@@ -97,18 +112,5 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-
-
-
-
-    override fun onPause() {
-        super.onPause()
-        sensorManager.unregisterListener(shakeDetector)
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 }

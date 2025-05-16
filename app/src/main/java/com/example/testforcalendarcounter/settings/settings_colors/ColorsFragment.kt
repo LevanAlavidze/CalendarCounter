@@ -72,6 +72,7 @@ class ColorsFragment : Fragment() {
                 Toast.makeText(requireContext(), "Please select a background", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+            (activity as? MainActivity)?.applyBackgroundFromPreferences()
             // Force the activity to recreate so the new background applies immediately
             requireActivity().recreate()
         }
@@ -84,7 +85,6 @@ class ColorsFragment : Fragment() {
             putString("background_value", value)
             apply()
         }
-        (activity as? MainActivity)?.applyBackgroundFromPreferences()
     }
 
     override fun onDestroyView() {

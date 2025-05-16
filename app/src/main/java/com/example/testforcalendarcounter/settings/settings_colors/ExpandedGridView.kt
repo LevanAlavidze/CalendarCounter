@@ -11,7 +11,6 @@ class ExpandedGridView @JvmOverloads constructor(
 ) : GridView(context, attrs, defStyleAttr) {
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        // Make GridView expand fully within a ScrollView
         val expandedSpec = MeasureSpec.makeMeasureSpec(Int.MAX_VALUE shr 2, MeasureSpec.AT_MOST)
         super.onMeasure(widthMeasureSpec, expandedSpec)
         layoutParams.height = measuredHeight
