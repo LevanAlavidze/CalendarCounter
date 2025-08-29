@@ -1,6 +1,6 @@
 package com.example.testforcalendarcounter.repository.cigarette
 
-import com.example.testforcalendarcounter.data.CigaretteEntry
+import com.example.testforcalendarcounter.data.entity.CigaretteEntry
 import com.example.testforcalendarcounter.data.dao.CigaretteDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -33,6 +33,11 @@ class CigaretteRepositoryImpl @Inject constructor(
         cigaretteDao.getDailySum(today) ?: 0
     }
 
+    override suspend fun getDailyCount(date: LocalDate): Int = withContext(Dispatchers.IO) {
+        cigaretteDao.getDailySum(date) ?: 0
+    }
+
+
     override suspend fun getWeeklyCount(): Int = withContext(Dispatchers.IO) {
         val today = Clock.System.todayIn(TimeZone.currentSystemDefault())
         val startOfWeek = today.minus(today.dayOfWeek.ordinal, DateTimeUnit.DAY)
@@ -44,6 +49,11 @@ class CigaretteRepositoryImpl @Inject constructor(
         val startOfMonth = today.minus(today.dayOfMonth - 1, DateTimeUnit.DAY)
         cigaretteDao.getCountBetweenDates(startOfMonth, today)
     }
+
+    override suspend fun getEarliestDate(): LocalDate? = withContext(Dispatchers.IO) {
+        cigaretteDao.getEarliestDate()
+    }
+
 
     override suspend fun getCountBetweenDates(
         startDate: LocalDate,

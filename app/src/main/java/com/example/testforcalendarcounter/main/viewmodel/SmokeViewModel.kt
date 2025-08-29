@@ -4,18 +4,25 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.testforcalendarcounter.data.CigaretteEntry
-import com.example.testforcalendarcounter.data.UserSettings
+import com.example.testforcalendarcounter.data.entity.CigaretteEntry
 import com.example.testforcalendarcounter.data.timer.Timer
 import com.example.testforcalendarcounter.data.timer.TimerManager
-import com.example.testforcalendarcounter.enums.MoodLevel
 import com.example.testforcalendarcounter.repository.Settings.UserSettingsRepository
+import com.example.testforcalendarcounter.repository.cigarette.BaselineRepository
 import com.example.testforcalendarcounter.repository.cigarette.CigaretteRepository
 import com.example.testforcalendarcounter.repository.packprice.PackPriceRepository
 import com.example.testforcalendarcounter.repository.stats.StatsRepository
 import com.example.testforcalendarcounter.repository.timer.TimerRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.plus
+import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.todayIn
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,6 +33,7 @@ class SmokeViewModel @Inject constructor(
     private val packPriceRepository: PackPriceRepository, // For pack price & currency
     private val timerManager: TimerManager,
     private val userSettingsRepository: UserSettingsRepository,
+    private val baselineRepository: BaselineRepository,
 ) : ViewModel() {
 
     // region LiveData Exposed to UI
@@ -56,18 +64,29 @@ class SmokeViewModel @Inject constructor(
     private val _dailySavings = MutableLiveData<Double>()
     val dailySavings: LiveData<Double> = _dailySavings
 
-    private val _moodLevel = MutableLiveData<MoodLevel>()
-    val moodLevel: LiveData<MoodLevel> = _moodLevel
+    private val _lifetimeNotSmoked = MutableLiveData<Long>()
+    val lifetimeNotSmoked: LiveData<Long> = _lifetimeNotSmoked
+
+
+    /*private val _moodLevel = MutableLiveData<MoodLevel>()
+    val moodLevel: LiveData<MoodLevel> = _moodLevel*/
 
     private val _lastTenCigarettes = MutableLiveData<List<CigaretteEntry>>()
     val lastTenCigarettes: LiveData<List<CigaretteEntry>> = _lastTenCigarettes
     // endregion
+
+    private val _dailySavingsPercent = MutableLiveData<Int>()
+    val dailySavingsPercent: LiveData<Int> = _dailySavingsPercent
+
+    private fun tz() = TimeZone.currentSystemDefault()
 
     init {
         refreshCounts()
         loadTimerState()
         fetchLastTenCigarettes()
         fetchCurrency()
+        refreshLifetimeNotSmoked()
+       /* viewModelScope.launch { rollIfNeeded() }*/
     }
 
     // region Counters & Costs
@@ -97,23 +116,72 @@ class SmokeViewModel @Inject constructor(
             val costPerCig = packPriceRepository.calculateCostPerCigarette()
             val moneySaved = cigsSaved * costPerCig
 
+            val consumptionPercent  = if (baselineCigs > 0) {
+                ((dayCount.toFloat() / baselineCigs) * 100).toInt().coerceIn(0,100)
+            } else {
+                0
+            }
+
+
             // 4) Post results to LiveData
-            _dayCigaretteCount.value = dayCount
-            _weekCigaretteCount.value = weekCount
-            _monthCigaretteCount.value = monthCount
+            _dayCigaretteCount.postValue(dayCount)
+            _weekCigaretteCount.postValue(weekCount)
+            _monthCigaretteCount.postValue(monthCount)
 
-            _dailyCost.value = dailyCostPair
-            _weeklyCost.value = weeklyCostPair
-            _monthlyCost.value = monthlyCostPair
+            _dailyCost.postValue(dailyCostPair)
+            _weeklyCost.postValue(weeklyCostPair)
+            _monthlyCost.postValue(monthlyCostPair)
 
-            _dailySavings.value = moneySaved
+            _dailySavings.postValue(moneySaved)
+
+            _dailySavingsPercent.postValue(consumptionPercent)
 
 
-            val mood = computedMoodLevel(baselineCigs,dayCount)
-            _moodLevel.postValue(mood)
+
+            // mood logic …
+            /*_moodLevel.postValue(computedMoodLevel(baselineCigs, dayCount))*/
         }
     }
     // endregion
+
+    fun refreshLifetimeNotSmoked() {
+        viewModelScope.launch {
+            val tz = TimeZone.currentSystemDefault()
+            val today = Clock.System.todayIn(tz)
+
+            val firstLog = cigaretteRepository.getEarliestDate() ?: today
+            val firstBaseline = baselineRepository.earliestEffective() ?: today
+            val start = if (firstLog < firstBaseline) firstLog else firstBaseline
+
+            // Counts per day in [start, today)
+            val byDay = cigaretteRepository.getCountBetweenDatesList(start, today)
+
+            // Effective-dated segments
+            val segments = baselineRepository.getAll().sortedBy { it.effectiveDate }
+
+            // Baseline effective at 'start' (or 0 if none)
+            var segIdx = segments.indexOfLast { it.effectiveDate <= start }
+            var currentBaseline = if (segIdx >= 0) segments[segIdx].baseline else 0
+
+            var total = 0L
+            var d = start
+            // IMPORTANT: stop at yesterday -> d < today
+            while (d < today) {
+                // advance segment if a new baseline becomes effective on/before d
+                while (segIdx + 1 < segments.size && segments[segIdx + 1].effectiveDate <= d) {
+                    segIdx++
+                    currentBaseline = segments[segIdx].baseline
+                }
+                val smoked = byDay[d] ?: 0
+                total += (currentBaseline - smoked).coerceAtLeast(0)
+                d = d.plus(1, DateTimeUnit.DAY)
+            }
+
+            _lifetimeNotSmoked.postValue(total)
+        }
+    }
+
+
 
     // region Timer
     fun loadTimerState() {
@@ -146,12 +214,48 @@ class SmokeViewModel @Inject constructor(
 
             // Update UI
             refreshCounts()
+            refreshLifetimeNotSmoked()
             fetchCurrency()
             fetchLastTenCigarettes()
         }
     }
 
-    fun computedMoodLevel(
+    /*suspend fun rollIfNeeded(now: Instant = Clock.System.now()) {
+        val today = now.toLocalDateTime(tz()).date
+
+        lifetimeRepository.ensureRow()
+        val lastRolled = lifetimeRepository.getLastRolledDate()
+
+        // First run: start tracking from today, don’t roll anything
+        if (lastRolled == null) {
+            lifetimeRepository.setLastRolledDate(today)
+            _lifetimeNotSmoked.postValue(lifetimeRepository.getLifetimeNotSmoked())
+            return
+        }
+
+        // Already rolled today
+        if (lastRolled >= today) {
+            _lifetimeNotSmoked.postValue(lifetimeRepository.getLifetimeNotSmoked())
+            return
+        }
+
+        val baseline = userSettingsRepository.getUserSettings()?.baselineCigsPerDay ?: 0
+        var d: LocalDate = lastRolled
+        var add = 0L
+
+        while (d < today) {
+            val smoked = cigaretteRepository.getDailyCount(d)
+            val notSmoked = (baseline - smoked).coerceAtLeast(0)
+            add += notSmoked.toLong()
+            d = d.plus(1, DateTimeUnit.DAY)
+        }
+
+        if (add > 0) lifetimeRepository.addToLifetime(add)
+        lifetimeRepository.setLastRolledDate(today)
+        _lifetimeNotSmoked.postValue(lifetimeRepository.getLifetimeNotSmoked())
+    }*/
+
+/*    fun computedMoodLevel(
         baseline: Int,
         currentDailyCount: Int
     ): MoodLevel {
@@ -175,7 +279,7 @@ class SmokeViewModel @Inject constructor(
         }
 
 
-    }
+    }*/
 
 
     fun deleteCigarette(entry: CigaretteEntry) {
@@ -206,6 +310,7 @@ class SmokeViewModel @Inject constructor(
 
             // 4) Update UI
             refreshCounts()
+            refreshLifetimeNotSmoked()
             fetchLastTenCigarettes()
             loadTimerState()
 

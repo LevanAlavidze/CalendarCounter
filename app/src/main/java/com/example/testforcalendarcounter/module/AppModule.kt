@@ -2,6 +2,7 @@ package com.example.testforcalendarcounter.module
 
 import android.content.Context
 import androidx.room.Room
+import com.example.testforcalendarcounter.data.dao.BaselineDao
 import com.example.testforcalendarcounter.repository.cigarette.CigaretteRepository
 import com.example.testforcalendarcounter.repository.cigarette.CigaretteRepositoryImpl
 import com.example.testforcalendarcounter.data.dao.CigaretteDao
@@ -11,6 +12,8 @@ import com.example.testforcalendarcounter.data.dao.UserSettingsDao
 import com.example.testforcalendarcounter.dataBase.CigaretteDatabase
 import com.example.testforcalendarcounter.repository.Settings.UserSettingsRepository
 import com.example.testforcalendarcounter.repository.Settings.UserSettingsRepositoryImpl
+import com.example.testforcalendarcounter.repository.cigarette.BaselineRepository
+import com.example.testforcalendarcounter.repository.cigarette.BaselineRepositoryImpl
 import com.example.testforcalendarcounter.repository.packprice.PackPriceRepository
 import com.example.testforcalendarcounter.repository.packprice.PackPriceRepositoryImpl
 import com.example.testforcalendarcounter.repository.quiz.QuizRepository
@@ -19,7 +22,6 @@ import com.example.testforcalendarcounter.repository.stats.StatsRepository
 import com.example.testforcalendarcounter.repository.stats.StatsRepositoryImpl
 import com.example.testforcalendarcounter.repository.timer.TimerRepository
 import com.example.testforcalendarcounter.repository.timer.TimerRepositoryImpl
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,6 +34,8 @@ import kotlinx.coroutines.Dispatchers
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+
 
     // 1) Provide the database
     @Provides
@@ -61,6 +65,7 @@ object AppModule {
     @Singleton
     fun provideUserSettingsDao(db: CigaretteDatabase): UserSettingsDao = db.userSettingsDao()
 
+
     // 3) Provide each repository separately
     @Provides
     @Singleton
@@ -86,12 +91,26 @@ object AppModule {
         return PackPriceRepositoryImpl(packPriceDao)
     }
 
+
+
     @Provides
     @Singleton
     fun provideQuizRepository(
         @ApplicationContext context: Context
     ): QuizRepository {
         return QuizRepositoryImpl(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideBaselineDao(db: CigaretteDatabase): BaselineDao = db.baselineDao()
+
+    @Provides
+    @Singleton
+    fun provideBaselineRepository(
+        baselineDao: BaselineDao
+    ):BaselineRepository {
+        return BaselineRepositoryImpl(baselineDao)
     }
 
 
@@ -113,6 +132,8 @@ object AppModule {
     ): UserSettingsRepository {
         return UserSettingsRepositoryImpl(userSettingsDao)
     }
+
+
 
     // 4) Provide a coroutine dispatcher if needed
     @Provides

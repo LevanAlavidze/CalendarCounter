@@ -50,10 +50,19 @@ class SettingsFragment : Fragment() {
             binding.baselineEditText.setText(baseline.toString())
         }
 
-        binding.saveBaselineButton.setOnClickListener{
-            val baselineStr = binding.baselineEditText.text.toString()
-            val baseline = baselineStr.toIntOrNull() ?:0
-            settingsViewModel.updateBaseLine(baseline)
+        binding.saveBaselineButton.setOnClickListener {
+            val baseline = binding.baselineEditText.text.toString()
+                .toIntOrNull()
+                ?.coerceAtLeast(0) ?: run {
+                Toast.makeText(requireContext(), "Enter a valid number", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Apply from TODAY
+            settingsViewModel.saveBaseline(baseline)
+        }
+        settingsViewModel.baselineSaved.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), "Baseline saved", Toast.LENGTH_SHORT).show()
         }
 
         binding.btnOpenColors.setOnClickListener{

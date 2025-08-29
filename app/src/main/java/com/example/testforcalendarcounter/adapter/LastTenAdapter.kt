@@ -3,7 +3,7 @@ package com.example.testforcalendarcounter.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.testforcalendarcounter.data.CigaretteEntry
+import com.example.testforcalendarcounter.data.entity.CigaretteEntry
 import com.example.testforcalendarcounter.databinding.ItemCigaretteEntryBinding
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone

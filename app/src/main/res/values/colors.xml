@@ -4,5 +4,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="red">#FD0534</color>
+    <color name="green_accent">#405601</color>
+    <color name="red_accent">#922602</color>
 
 </resources>

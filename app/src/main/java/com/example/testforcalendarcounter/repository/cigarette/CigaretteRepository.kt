@@ -1,6 +1,6 @@
 package com.example.testforcalendarcounter.repository.cigarette
 
-import com.example.testforcalendarcounter.data.CigaretteEntry
+import com.example.testforcalendarcounter.data.entity.CigaretteEntry
 
 import kotlinx.datetime.LocalDate
 
@@ -11,8 +11,12 @@ interface CigaretteRepository {
 
     // Basic counts
     suspend fun getDailyCount(): Int
+    suspend fun getDailyCount(date: LocalDate): Int
     suspend fun getWeeklyCount(): Int
     suspend fun getMonthlyCount(): Int
+
+    suspend fun getEarliestDate(): LocalDate?
+
 
     suspend fun getCountBetweenDates(
         startDate: LocalDate,

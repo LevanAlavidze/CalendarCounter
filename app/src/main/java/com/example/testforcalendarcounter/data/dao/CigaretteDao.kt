@@ -5,7 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.testforcalendarcounter.data.CigaretteEntry
+import com.example.testforcalendarcounter.data.entity.CigaretteEntry
 import kotlinx.datetime.LocalDate
 
 
@@ -29,6 +29,10 @@ interface CigaretteDao {
 
     @Delete
     suspend fun deleteCigarette(entry: CigaretteEntry)
+
+    @Query("SELECT MIN(date) FROM cigaretteentry")
+    suspend fun getEarliestDate(): LocalDate?
+
 
     @Query("""
         SELECT date, SUM(count) as totalCount

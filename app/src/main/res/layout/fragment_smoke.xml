@@ -1,49 +1,50 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
 
-
+    <!-- Top row: Money saved, Life regained, Cigs not smoked -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:orientation="horizontal"
-        android:weightSum="3"
-        android:layout_marginBottom="16dp">
+        android:weightSum="3">
 
-        <!-- Money saved card -->
+        <!-- Money saved -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
             app:cardCornerRadius="8dp"
-            app:cardElevation="4dp"
-            android:layout_marginEnd="8dp">
+            app:cardElevation="2dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:minHeight="72dp"
                 android:gravity="center"
+                android:orientation="vertical"
                 android:padding="12dp">
 
                 <ImageView
                     android:id="@+id/ivMoneyIcon"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:src="@drawable/money" />
 
                 <TextView
                     android:id="@+id/tvMoneySavedValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
                     android:text="$0.00"
-                    android:textStyle="bold"
                     android:textSize="18sp"
-                    android:layout_marginTop="4dp" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvMoneySavedLabel"
@@ -54,36 +55,37 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Life regained card -->
+        <!-- Life regained -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
             app:cardCornerRadius="8dp"
-            app:cardElevation="4dp"
-            android:layout_marginEnd="8dp">
+            app:cardElevation="2dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:minHeight="72dp"
                 android:gravity="center"
+                android:orientation="vertical"
                 android:padding="12dp">
 
                 <ImageView
                     android:id="@+id/ivLifeIcon"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:src="@drawable/heart" />
 
                 <TextView
                     android:id="@+id/tvLifeRegainedValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
                     android:text="0d 0h 0m"
-                    android:textStyle="bold"
                     android:textSize="18sp"
-                    android:layout_marginTop="4dp" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvLifeRegainedLabel"
@@ -94,25 +96,27 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Cigarettes not smoked card -->
+        <!-- Cigs not smoked -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
             app:cardCornerRadius="8dp"
-            app:cardElevation="4dp">
+            app:cardElevation="2dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="72dp"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="12dp">
 
                 <ImageView
                     android:id="@+id/ivCigaretteIcon"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:src="@drawable/notsmoked" />
 
                 <TextView
@@ -126,38 +130,36 @@
 
                 <TextView
                     android:id="@+id/tvNotSmokedLabel"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxLines="1"
                     android:text="Cigs not smoked"
                     android:textSize="10sp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
-
     </LinearLayout>
 
-    <!-- 2nd row: Daily / Weekly / Monthly counters in cards -->
+    <!-- Daily/Weekly/Monthly -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:orientation="horizontal"
-        android:weightSum="3"
-        android:layout_marginBottom="16dp">
+        android:weightSum="3">
 
         <!-- Daily -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
             app:cardCornerRadius="8dp"
-            app:cardElevation="2dp"
-            android:layout_marginEnd="8dp">
+            app:cardElevation="2dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:gravity="center"
+                android:orientation="vertical"
                 android:padding="12dp">
 
                 <TextView
@@ -166,14 +168,14 @@
                     android:layout_height="wrap_content"
                     android:text="Daily: 0"
                     android:textSize="16sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/dailyCostTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Cost: 0 GEL"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -181,16 +183,16 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
             app:cardCornerRadius="8dp"
-            app:cardElevation="2dp"
-            android:layout_marginEnd="8dp">
+            app:cardElevation="2dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:gravity="center"
+                android:orientation="vertical"
                 android:padding="12dp">
 
                 <TextView
@@ -199,14 +201,14 @@
                     android:layout_height="wrap_content"
                     android:text="Weekly: 0"
                     android:textSize="16sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/weeklyCostTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Cost: 0 GEL"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -214,6 +216,7 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
             app:cardCornerRadius="8dp"
             app:cardElevation="2dp">
@@ -221,8 +224,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:gravity="center"
+                android:orientation="vertical"
                 android:padding="12dp">
 
                 <TextView
@@ -231,19 +234,19 @@
                     android:layout_height="wrap_content"
                     android:text="Monthly: 0"
                     android:textSize="16sp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/monthlyCostTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Cost: 0 GEL"
-                    android:textSize="14sp"/>
+                    android:textSize="14sp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
-
     </LinearLayout>
-    <!-- RecyclerView inside NestedScrollView -->
+
+    <!-- Last ten cigarettes -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -256,95 +259,80 @@
             android:paddingTop="8dp" />
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Timer text -->
-    <TextView
-        android:id="@+id/tvTimer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="16dp"
-        android:text="Timer: 00:00:00"
-        android:textSize="30sp" />
-
-    <!-- Savings text (optional) -->
-
-
-    <!-- NEW: Custom Mood Layout (Smiley + Label) -->
-    <!-- NEW: Custom Mood Layout (Smiley + Label + ProgressBar + Savings) -->
+    <!-- Heart meter + controls -->
     <LinearLayout
-        android:id="@+id/layoutSmiley"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_gravity="center"
-        android:orientation="vertical"
-        android:padding="8dp"
-        android:layout_marginBottom="8dp">
+        android:gravity="center"
+        android:orientation="vertical">
 
-        <!-- Smiley and Mood Label -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/heartMeterView"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="8dp">
-
-            <ImageView
-                android:id="@+id/ivSmiley"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/smile_fine" />
-
-            <TextView
-                android:id="@+id/tvSmileyLabel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Fine"
-                android:textSize="16sp"
-                android:layout_marginStart="8dp" />
-        </LinearLayout>
-
-
-        <!-- Progress Bar -->
-        <ProgressBar
-            android:id="@+id/moodProgressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:indeterminate="false"
-            android:max="4"
-            android:progress="0"
-            android:layout_marginBottom="8dp" />
-
-        <!-- Savings Text -->
-        <TextView
-            android:id="@+id/tvSavings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="You've Saved: 0"
-            android:textSize="12sp"
-            android:layout_gravity="center" />
+            app:lottie_autoPlay="false"
+            app:lottie_enableMergePathsForKitKatAndAbove="true"
+            app:lottie_loop="false"
+            app:lottie_rawRes="@raw/loading_heart" />
     </LinearLayout>
 
 
-    <!-- Text that explains how to add cigarette -->
-    <TextView
-        android:id="@+id/tvAddCigarette"
+    <!-- Center stats & add button -->
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Tap to add Cigarette"
-        android:textSize="12sp" />
+        android:gravity="center"
+        android:orientation="vertical">
 
-    <!-- Lottie Animation View for adding a cigarette -->
-    <com.airbnb.lottie.LottieAnimationView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/cigaretteAnimationView"
-        android:layout_width="300dp"
+        <TextView
+            android:id="@+id/tvArcSavings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="₾0.00"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvTimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="00:00:00"
+            android:textSize="32sp" />
+
+        <FrameLayout
+        android:layout_width="250dp"
         android:layout_height="50dp"
-        android:layout_gravity="center"
-        app:lottie_rawRes="@raw/cigarette_animation"
-        app:lottie_loop="false"
-        app:lottie_autoPlay="false" />
+        android:layout_marginTop="4dp"
+        android:layout_gravity="center">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/cigaretteAnimationView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:lottie_autoPlay="false"
+            app:lottie_loop="false"
+            app:lottie_rawRes="@raw/cigarette_animation" />
+
+        <TextView
+            android:id="@+id/tvAddCigarette"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|start"
+            android:paddingStart="72dp"
+            android:text="Tap to add Cigarette"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:background="@android:color/transparent"
+            android:shadowColor="#AA000000"
+            android:shadowDx="2"
+            android:shadowDy="2"
+            android:shadowRadius="3"/>
+        </FrameLayout>
+    </LinearLayout>
 
 </LinearLayout>

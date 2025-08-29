@@ -1,4 +1,4 @@
-package com.example.testforcalendarcounter.data
+package com.example.testforcalendarcounter.data.entity
 
 
 import androidx.room.Entity
