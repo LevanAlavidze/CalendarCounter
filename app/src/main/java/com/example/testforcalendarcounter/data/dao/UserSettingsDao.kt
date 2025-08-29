@@ -14,4 +14,6 @@ interface UserSettingsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOrUpdate(userSettings: UserSettings)
+
+
 }

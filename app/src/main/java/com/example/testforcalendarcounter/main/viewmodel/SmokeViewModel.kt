@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.testforcalendarcounter.data.entity.CigaretteEntry
 import com.example.testforcalendarcounter.data.timer.Timer
 import com.example.testforcalendarcounter.data.timer.TimerManager
-import com.example.testforcalendarcounter.repository.Settings.UserSettingsRepository
+import com.example.testforcalendarcounter.repository.settings.UserSettingsRepository
 import com.example.testforcalendarcounter.repository.cigarette.BaselineRepository
 import com.example.testforcalendarcounter.repository.cigarette.CigaretteRepository
 import com.example.testforcalendarcounter.repository.packprice.PackPriceRepository

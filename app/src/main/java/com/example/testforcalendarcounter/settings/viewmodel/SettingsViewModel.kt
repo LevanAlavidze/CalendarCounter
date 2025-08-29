@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testforcalendarcounter.data.packprice.PackPrice
-import com.example.testforcalendarcounter.repository.Settings.UserSettingsRepository
+import com.example.testforcalendarcounter.repository.settings.UserSettingsRepository
 import com.example.testforcalendarcounter.repository.cigarette.BaselineRepository
 import com.example.testforcalendarcounter.repository.packprice.PackPriceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

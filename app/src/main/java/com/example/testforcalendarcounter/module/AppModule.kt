@@ -10,8 +10,8 @@ import com.example.testforcalendarcounter.data.dao.PackPriceDao
 import com.example.testforcalendarcounter.data.dao.TimerDao
 import com.example.testforcalendarcounter.data.dao.UserSettingsDao
 import com.example.testforcalendarcounter.dataBase.CigaretteDatabase
-import com.example.testforcalendarcounter.repository.Settings.UserSettingsRepository
-import com.example.testforcalendarcounter.repository.Settings.UserSettingsRepositoryImpl
+import com.example.testforcalendarcounter.repository.settings.UserSettingsRepository
+import com.example.testforcalendarcounter.repository.settings.UserSettingsRepositoryImpl
 import com.example.testforcalendarcounter.repository.cigarette.BaselineRepository
 import com.example.testforcalendarcounter.repository.cigarette.BaselineRepositoryImpl
 import com.example.testforcalendarcounter.repository.packprice.PackPriceRepository
@@ -65,6 +65,10 @@ object AppModule {
     @Singleton
     fun provideUserSettingsDao(db: CigaretteDatabase): UserSettingsDao = db.userSettingsDao()
 
+    @Provides
+    @Singleton
+    fun provideBaselineDao(db: CigaretteDatabase): BaselineDao = db.baselineDao()
+
 
     // 3) Provide each repository separately
     @Provides
@@ -101,17 +105,19 @@ object AppModule {
         return QuizRepositoryImpl(context)
     }
 
-    @Provides
-    @Singleton
-    fun provideBaselineDao(db: CigaretteDatabase): BaselineDao = db.baselineDao()
 
-    @Provides
-    @Singleton
+    @Provides @Singleton
     fun provideBaselineRepository(
-        baselineDao: BaselineDao
-    ):BaselineRepository {
-        return BaselineRepositoryImpl(baselineDao)
-    }
+        baselineDao: BaselineDao,
+        userSettingsRepository: UserSettingsRepository,
+        cigaretteDao: CigaretteDao,
+        io: CoroutineDispatcher
+    ): BaselineRepository = BaselineRepositoryImpl(
+        baselineDao = baselineDao,
+        settingsRepo = userSettingsRepository,
+        cigaretteDao = cigaretteDao,
+        io = io
+    )
 
 
     @Provides

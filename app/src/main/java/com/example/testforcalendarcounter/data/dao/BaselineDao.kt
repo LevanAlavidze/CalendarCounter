@@ -9,14 +9,14 @@ interface BaselineDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsert(entry: BaselineHistory)
 
-
+    // ⬇️ Return just the baseline value
     @Query("""
-        SELECT * FROM baseline_history
+        SELECT baseline FROM baseline_history
         WHERE effectiveDate <= :date
         ORDER BY effectiveDate DESC
         LIMIT 1
     """)
-    suspend fun getBaselineForDate(date: LocalDate): BaselineHistory?
+    suspend fun getBaselineForDate(date: LocalDate): Int?
 
     @Query("SELECT * FROM baseline_history ORDER BY effectiveDate ASC")
     suspend fun getAll(): List<BaselineHistory>
@@ -29,5 +29,4 @@ interface BaselineDao {
 
     @Query("SELECT COUNT(*) FROM baseline_history")
     suspend fun count(): Int
-
 }

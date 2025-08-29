@@ -8,5 +8,6 @@ interface BaselineRepository {
     suspend fun baselineFor(date: LocalDate): Int
     suspend fun getAll(): List<BaselineHistory>
     suspend fun earliestEffective(): LocalDate?
+    suspend fun ensureBootstrapped()
 
 }

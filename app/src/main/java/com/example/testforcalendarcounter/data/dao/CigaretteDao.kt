@@ -33,6 +33,9 @@ interface CigaretteDao {
     @Query("SELECT MIN(date) FROM cigaretteentry")
     suspend fun getEarliestDate(): LocalDate?
 
+    @Query("SELECT MIN(date) FROM cigaretteentry")
+    suspend fun getEarliestSmokeDate(): LocalDate?
+
 
     @Query("""
         SELECT date, SUM(count) as totalCount
@@ -51,6 +54,7 @@ interface CigaretteDao {
         ORDER BY monthNum
     """)
     suspend fun getCountsGroupedByMonth(startDate: LocalDate, endDate: LocalDate): List<MonthCount>
+
 
 
 
